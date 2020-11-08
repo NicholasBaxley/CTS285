@@ -145,7 +145,7 @@ def questionSolver(question): # Solves questions and returns the answer as answe
         
     return answer
 
-def guessFunction():
+def guessFunction(): # Retreives a guess from user and makes sure its a number
     guess = input()
     if not isNumber(guess):
         print("Not a number! Try again")
@@ -155,7 +155,7 @@ def guessFunction():
     
     return guess
 
-def memoryBank():
+def memoryBank(): #Starts the memory bank game
     count = 0
     total = 0
     print()
@@ -191,7 +191,7 @@ def memoryBank():
             break
         
 
-def memBkRandomQuestion():
+def memBkRandomQuestion(): #Generates the random question for memory bank
     operators = ["+","-","x"]
     x = random.randint(1, 99)
     y = random.choice(operators)
@@ -201,7 +201,7 @@ def memBkRandomQuestion():
     
     return question, answer
 
-def menu():
+def menu(): #Main menu of the program, all games should lead back to here
     print("What do you want to do?")
     print("""
 1) AnswerChecker 
