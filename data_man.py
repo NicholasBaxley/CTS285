@@ -1,3 +1,5 @@
+import random
+
 def checkQuestion(question): # Checks to make sure the question is in the correct format.
     operators = ["+","-","/","*","x"]
     if not isNumber(question[0]):
@@ -17,14 +19,18 @@ def checkQuestion(question): # Checks to make sure the question is in the correc
 def isNumber(s): # Checks to see if a object is a number 
     try:
         float(s)
+        
         return True
+    
     except ValueError:
+        
         return False
 
 def strgToNum(question): # Converts all number strings to number floats
     question[0] = float(question[0])
     question[2] = float(question[2])
-    question[4] = float(question[4])   
+    question[4] = float(question[4]) 
+    
     return question
 
 def checkRemainder(remainder, question, answer):
@@ -44,13 +50,17 @@ def checkRemainder(remainder, question, answer):
                 if remainder == guess:                        
                         print("Correct!")  
                         loop = 3
+                        
                         return 1
+                    
                 else:
                     print()
                     print("Sorry, thats wrong.")
                     print("The answer was",answer)
                     loop = 3
-                    return 0                
+                    
+                    return 0
+                
             else:
                 print("Your guess must be a number!")
       
@@ -59,7 +69,7 @@ def answerChecker(x, y): # The menu option that lets you try to solve questions.
     totalQuestions = y
     loop = 1
     while loop == 1:
-        print()
+        
         print("Input question (Without Remainder): ")
         question = input().split()
         
@@ -132,15 +142,81 @@ def questionSolver(question): # Solves questions and returns the answer as answe
     elif question[1] == "/":
         answer.append(question[0] // question[2]) 
         answer.append(question[0] % question[2])
+        
     return answer
 
+def guessFunction():
+    guess = input()
+    if not isNumber(guess):
+        print("Not a number! Try again")
+        print()
+    else:
+        guess = int(guess)
+    
+    return guess
+
+def memoryBank():
+    count = 0
+    total = 0
+    print()
+    print("Welcome to Memory Bank!")
+    while True:
+        question, answer = memBkRandomQuestion()       
+        print("Your question is: ",end="")
+        for i in question:
+            print(f"{i} ",end="")
+        print("= ? ")
+        print()
+        guess = guessFunction()
+        if guess == answer[0]:
+            print("Correct!")
+            count += 1
+        else:
+            print("Wrong! You get one more chance.")
+            guess = guessFunction()
+            if guess == answer[0]:
+                print("Correct!")
+                count += 1
+            else:
+                print("Sorry the answer was ",answer[0],".",sep="")
+        total += 1
+        print("Would you like to play again?")
+        print("""
+1) Yes
+2) No""")
+        playagain = int(input())
+        if playagain == 2:
+            print("You guessed",count,"correct out of",total)
+            menu()
+            break
+        
+
+def memBkRandomQuestion():
+    operators = ["+","-","x"]
+    x = random.randint(1, 99)
+    y = random.choice(operators)
+    z = random.randint(1, 99)
+    question = [x,y,z]
+    answer = questionSolver(question)  
+    
+    return question, answer
+
 def menu():
-    menu = int(input("What do you want to do? 1) AnswerChecker "))
+    print("What do you want to do?")
+    print("""
+1) AnswerChecker 
+2) MemoryBank
+3) Exit
+         """)   
+    menu = int(input())   
     if menu == 1:
         x = 0
         y = 0
+        print("Format must be ( [Number] {Operator} [Number] = [Number])")
         answerChecker(x, y)
+    elif menu == 2:
+        memoryBank()
     else:
-        print("Bye")
+        print("GoodBye.")
 menu()
             
