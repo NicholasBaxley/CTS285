@@ -36,6 +36,7 @@ def strgToNum(question): # Converts all number strings to number floats
 def checkRemainder(remainder, question, answer):
     # Checks to see if you know the remainder of the answer if right returns 1
     # if wrong returns 0
+    print(pattern)
     print("Good job on guessing the correct answer, now for the remainder")
     loop = 2
     while loop == 2:
@@ -47,24 +48,28 @@ def checkRemainder(remainder, question, answer):
             guess = input("What is the remainder? R: ")           
             if isNumber(guess):
                 guess = int(guess)
-                if remainder == guess:                        
+                if remainder == guess:   
+                        print(pattern)                     
                         print("Correct!")  
                         loop = 3
                         
                         return 1
                     
                 else:
+                    print(pattern)
                     print()
                     print("Sorry, thats wrong.")
-                    print("The answer was",answer)
+                    print(f"The answer was {answer:.0f} and the remainder was {remainder:.0f}")
                     loop = 3
                     
                     return 0
                 
             else:
+                print(pattern)
                 print("Your guess must be a number!")
       
 def answerChecker(x, y): # The menu option that lets you try to solve questions.
+    print(pattern)
     correctAnswers = x
     totalQuestions = y
     loop = 1
@@ -94,8 +99,10 @@ def answerChecker(x, y): # The menu option that lets you try to solve questions.
             correctAnswers += checkRemainder(remainder, question, answer)
         else:
             correctAnswers += 1
+            print(pattern)
             print("Correct!")  
     else: 
+        print(pattern)
         print("Wrong answer, One more guess!.", end="")
         while loop == 2:
             print()
@@ -111,21 +118,35 @@ def answerChecker(x, y): # The menu option that lets you try to solve questions.
                         correctAnswers += checkRemainder(remainder, question, answer)
                     else:
                         correctAnswers += 1
+                        print(pattern)
                         print("Correct!")  
                 else:
                     print()
+                    print(pattern)
                     print("Sorry, thats wrong.")
-                    print("The answer was",answer)
+                    print(f"The answer was {answer:.0f} and the remainder was {remainder}")
                 loop = 3
             else:
                 print("Your guess must be a number!")
-    totalQuestions += 1
-    
-    if totalQuestions == 10:
-        print("You guessed",correctAnswers,"out of",totalQuestions)
-        menu()
-    else:
+    totalQuestions += 1 
+    while True:
+        repeat = input("Do you want to play again?\n\n1) Yes\n2) No\n\n")
+        if repeat == "1" or repeat == "2":   
+            break
+        else:
+            print(pattern)
+            print("Not an option!")
+    if repeat == "1":
         answerChecker(correctAnswers, totalQuestions)
+    if repeat == "2":
+        print(pattern)
+        print(f'You guessed {correctAnswers} out of {totalQuestions} questions correctly!')
+        print()
+        menu()
+        
+    
+    
+    
             
 def questionSolver(question): # Solves questions and returns the answer as answer[0] 
                               # and remainder if neccesary as answer[1]
@@ -141,27 +162,29 @@ def questionSolver(question): # Solves questions and returns the answer as answe
         answer.append(0)
     elif question[1] == "/":
         answer.append(question[0] // question[2]) 
-        answer.append(question[0] % question[2])
-        
+        answer.append(question[0] % question[2])        
     return answer
 
 def guessFunction(): # Retreives a guess from user and makes sure its a number
-    guess = input()
-    if not isNumber(guess):
-        print("Not a number! Try again")
-        print()
-    else:
-        guess = int(guess)
-    
+    while True:
+        guess = input()
+        if not isNumber(guess):
+            print(pattern)
+            print("Not a number! Try again")
+            print()
+            continue
+        else:
+            guess = int(guess)
+            break        
     return guess
 
-def memoryBank(): #Starts the memory bank game
+def memoryBank(): # Starts the memory bank game
     count = 0
     total = 0
-    print()
+    print(pattern)
     print("Welcome to Memory Bank!")
     while True:
-        question, answer = memBkRandomQuestion()       
+        question, answer = memBkRandomQuestion()
         print("Your question is: ",end="")
         for i in question:
             print(f"{i} ",end="")
@@ -169,29 +192,36 @@ def memoryBank(): #Starts the memory bank game
         print()
         guess = guessFunction()
         if guess == answer[0]:
+            print(pattern)
             print("Correct!")
             count += 1
         else:
+            print(pattern)
             print("Wrong! You get one more chance.")
             guess = guessFunction()
             if guess == answer[0]:
+                print(pattern)
                 print("Correct!")
                 count += 1
             else:
+                print(pattern)
                 print("Sorry the answer was ",answer[0],".",sep="")
         total += 1
-        print("Would you like to play again?")
-        print("""
-1) Yes
-2) No""")
-        playagain = int(input())
-        if playagain == 2:
-            print("You guessed",count,"correct out of",total)
+        while True:
+            repeat = input("Do you want to play again?\n\n1) Yes\n2) No\n\n")
+            if repeat == "1" or repeat == "2":   
+                break
+            else:
+                print(pattern)
+                print("Not an option!")
+        if repeat == "2":
+            print()
+            print(pattern)
             menu()
             break
+        print(pattern)
         
-
-def memBkRandomQuestion(): #Generates the random question for memory bank
+def memBkRandomQuestion(): # Generates the random question for memory bank
     operators = ["+","-","x"]
     x = random.randint(1, 99)
     y = random.choice(operators)
@@ -201,12 +231,86 @@ def memBkRandomQuestion(): #Generates the random question for memory bank
     
     return question, answer
 
+def numberGuessor(): # Starts the Number Guessor game
+    attempts = 0
+    answer = random.randint(1, 99)
+    print(pattern)
+    print("Guess the correct number from 1-99!")
+    # Makes sure guess is a number
+    while True:
+        while True:
+            guess = input()
+            if isNumber(guess):
+                guess = int(guess)
+                break
+            else:
+                print("Please enter a number!")
+        # Makes you keep guessing and counts guesses as attempts
+        attempts += 1
+        if guess == answer:
+            print(pattern)
+            print(f"Congrats! You guessed correctly in {attempts} attempts!")          
+        else:
+            print(pattern)
+            print("Sorry thats incorrect. Please guess again.")
+            numberCloseness(answer, guess)
+            continue
+        # Asks if you want to play again
+        while True:
+            repeat = input("Do you want to play again?\n\n1) Yes\n2) No\n\n")
+            if repeat == "1":   
+                numberGuessor()
+                break
+            elif repeat == "2":
+                print()
+                print(pattern)
+                menu()
+                break
+            else:
+                print(pattern)
+                print("Not an option!")
+  
+# Determines how close the guess is to the answer in number guessor
+# and the closer the number is to the guess the better the hint is.                                
+def numberCloseness(answer, guess):
+    difference = abs(answer - guess)
+    
+    if difference > 50:
+        sideDifference = 20
+        offset = 12
+    elif difference > 40:
+        sideDifference = 18
+        offset = 10
+    elif difference > 30:
+        sideDifference = 14
+        offset = 6
+    elif difference > 20:
+        sideDifference = 12
+        offset = 5
+    elif difference > 10:
+        sideDifference = 10
+        offset = 3
+    else:
+        sideDifference = 1
+        offset = 1
+
+    leftSide  = (answer - sideDifference) + random.randint(-offset, offset)
+    rightSide = (answer + sideDifference) + random.randint(-offset, offset)
+    
+    if rightSide > 99:
+        rightSide = 99
+    if leftSide < 1:
+        leftSide = 1        
+    print()
+    print(f"Answer is bewteen {leftSide} and {rightSide}.")
+    
 def menu(): #Main menu of the program, all games should lead back to here
     print("What do you want to do?")
     print("""
-1) AnswerChecker 
-2) MemoryBank
-3) Exit
+1) Answer Checker 
+2) Memory Bank
+3) Number Guessor
+4) Exit
          """)   
     menu = int(input())   
     if menu == 1:
@@ -216,7 +320,11 @@ def menu(): #Main menu of the program, all games should lead back to here
         answerChecker(x, y)
     elif menu == 2:
         memoryBank()
-    else:
+    elif menu == 3:
+        numberGuessor()
+    else: 
         print("GoodBye.")
+
+pattern = "-"
+pattern *= 40    
 menu()
-            
